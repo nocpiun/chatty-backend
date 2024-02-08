@@ -1,0 +1,5 @@
+sqlServer: "localhost"
+sqlUserName: "root"
+sqlPassword: "123456"
+serverPort: 7000
+salt: "abcde" # Change it to a better salt on your own

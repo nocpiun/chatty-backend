@@ -1,0 +1,7 @@
+# idea
+/.idea/shelf/
+/.idea/workspace.xml
+/target/
+
+# project
+/config.yml
