@@ -22,7 +22,7 @@ public class ChattySQL {
         // Create tables
         statement.execute("use chatty_users;");
         statement.execute("create table if not exists user_info ( name varchar(50) not null, token varchar(36) not null, password varchar(100) not null );");
-//        statement.execute("create table if not exists user_rooms (  )");
+        statement.execute("create table if not exists user_profile ( name varchar(50) not null, rooms json not null );");
     }
 
     public void close() throws Exception {

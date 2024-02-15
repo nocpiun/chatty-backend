@@ -5,5 +5,13 @@ public enum PacketType {
     CLOSE,
     ERROR,
     REGISTER,
-    LOGIN
+    UNREGISTER,
+    LOGIN,
+    LOGOUT,
+    PROFILE,
+    ROOM,
+    ROOM_DETAIL,
+    ADD_FRIEND,
+    DELETE_FRIEND,
+    MESSAGE
 }

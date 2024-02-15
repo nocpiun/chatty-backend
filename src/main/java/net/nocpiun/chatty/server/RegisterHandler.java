@@ -1,6 +1,5 @@
 package net.nocpiun.chatty.server;
 
-import com.google.gson.JsonObject;
 import net.nocpiun.chatty.server.packet_data.RegisterPacketData;
 import net.nocpiun.chatty.user.User;
 import net.nocpiun.chatty.utils.Security;

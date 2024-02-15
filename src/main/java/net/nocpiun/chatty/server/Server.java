@@ -2,8 +2,6 @@ package net.nocpiun.chatty.server;
 
 import net.nocpiun.chatty.configuration.Configuration;
 import net.nocpiun.chatty.main.App;
-import net.nocpiun.chatty.sql.ChattySQL;
-import net.nocpiun.chatty.user.UserManager;
 import org.webbitserver.WebServer;
 import org.webbitserver.WebServers;
 
@@ -18,9 +16,9 @@ public class Server {
         port = Configuration.get().getServerPort();
 
         serverInstance = WebServers.createWebServer(port);
-        serverInstance.add("/gateway", new GatewayHandler(this));
         serverInstance.add("/login", new LoginHandler(this));
         serverInstance.add("/register", new RegisterHandler(this));
+        serverInstance.add("/chat", new ChatHandler(this));
     }
 
     public App getApp() {

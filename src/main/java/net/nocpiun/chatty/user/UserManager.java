@@ -1,31 +1,30 @@
 package net.nocpiun.chatty.user;
 
+import com.google.gson.Gson;
 import net.nocpiun.chatty.sql.ChattySQL;
+import net.nocpiun.chatty.utils.Manager;
 
+import java.sql.Array;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.ArrayList;
 
-public class UserManager {
-    private ChattySQL sql;
-
+public class UserManager extends Manager {
     public UserManager(ChattySQL sql) {
-        this.sql = sql;
+        super(sql);
     }
 
-    public List<User> getUsers() throws Exception {
+    public User getUserByToken(String token) throws Exception {
         sql.statement.execute("use chatty_users;");
-        ResultSet rs = sql.statement.executeQuery("select * from user_info;");
-        List<User> list = new ArrayList<>();
-
-        while(rs.next()) {
-            String userName = rs.getString("name");
-            String userToken = rs.getString("token");
-            String password = rs.getString("password");
-            list.add(new User(userName, userToken, password));
+        ResultSet rs = sql.statement.executeQuery("select * from user_info where token=\""+ token +"\";");
+        if(!rs.next()) {
+            throw new Exception("找不到用户：无效的token");
         }
+        String userName = rs.getString("name");
+        String userToken = rs.getString("token");
+        String password = rs.getString("password");
         rs.close();
-        return list;
+        return new User(userName, userToken, password);
     }
 
     public void registerUser(User user) throws Exception {
@@ -35,7 +34,10 @@ public class UserManager {
             throw new Exception("无法注册用户：该用户名已被使用");
         }
         rs.close();
-        sql.statement.execute("insert into user_info values ( \""+ user.name +"\", \""+ user.token +"\", \""+ user.password +"\" )");
+        // User Table
+        sql.statement.execute("insert into user_info values ( \""+ user.name +"\", \""+ user.token +"\", \""+ user.password +"\" );");
+        // Profile Table
+        sql.statement.execute("insert into user_profile values ( \""+ user.name +"\", \"[]\" );");
     }
 
     public void unregisterUser(User user) throws Exception {
@@ -46,6 +48,7 @@ public class UserManager {
         }
         rs.close();
         sql.statement.execute("delete from user_info where name=\""+ user.name +"\" and token=\""+ user.token +"\" and password=\""+ user.password +"\";");
+        sql.statement.execute("delete from user_profile where name=\""+ user.name +"\";");
     }
 
     public User loginUser(String userName, String password) throws Exception {
@@ -63,5 +66,21 @@ public class UserManager {
         }
 
         return new User(userName, token, password);
+    }
+
+    public Profile getUserProfileByName(String name) throws Exception {
+        sql.statement.execute("use chatty_users;");
+        ResultSet rs = sql.statement.executeQuery("select * from user_profile where name=\""+ name +"\";");
+        if(!rs.next()) {
+            throw new Exception("无法获取用户：无法找到指定用户");
+        }
+        return new Profile(name, new Gson().fromJson(rs.getString("rooms"), List.class));
+    }
+
+    public void setUserProfile(String name, Profile profile) throws Exception {
+        final String stringifiedRoomIds = new Gson().toJson(profile.rooms);
+
+        sql.statement.execute("use chatty_users;");
+        sql.statement.execute("update user_profile set name=\""+ profile.userName +"\", rooms=\'"+ stringifiedRoomIds +"\' where name=\""+ name +"\";");
     }
 }

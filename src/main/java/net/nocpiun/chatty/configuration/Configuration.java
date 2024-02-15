@@ -4,7 +4,6 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.File;
 import java.util.LinkedHashMap;
 
 public class Configuration {
@@ -16,7 +15,7 @@ public class Configuration {
     private Configuration() throws Exception {
         yaml = new Yaml();
 
-        InputStream stream = new FileInputStream(new File(configPath));
+        InputStream stream = new FileInputStream(configPath);
         config = yaml.load(stream);
     }
 
