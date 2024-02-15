@@ -2,6 +2,7 @@
 /.idea/shelf/
 /.idea/workspace.xml
 /target/
+/out/
 
 # project
 /config.yml

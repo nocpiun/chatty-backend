@@ -4,10 +4,8 @@ import com.google.gson.Gson;
 import net.nocpiun.chatty.sql.ChattySQL;
 import net.nocpiun.chatty.utils.Manager;
 
-import java.sql.Array;
 import java.sql.ResultSet;
 import java.util.List;
-import java.util.ArrayList;
 
 public class UserManager extends Manager {
     public UserManager(ChattySQL sql) {
